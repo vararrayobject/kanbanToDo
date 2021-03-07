@@ -11,6 +11,7 @@
                             @foreach ($items as $item)
                             @if ($status->id === $item->status_id)
                             <li class="list-item card mb-3 p-2" data-task-id="{{ $item->id }}"
+                                data-color-id="{{ $item->color->id }}"
                                 style="background-color:{{ $item->color->color }} !important">
                                 {{ $item->desc }}
                             </li>
@@ -54,7 +55,8 @@
                             <div class='mt-2'>
                                 <h5 class="">Color</h5>
                                 @foreach ($colors as $color)
-                                <div class="color-palette inline-block p-3" data-color-id="{{ $color->id }}" style="background: {{ $color->color }} 0% 0% no-repeat padding-box; border: 1px solid
+                                <div class="color-palette inline-block p-3" id="color-palette-{{ $color->id }}"
+                                    data-color-id="{{ $color->id }}" style="background: {{ $color->color }} 0% 0% no-repeat padding-box; border: 1px solid
                                     #00000066; border-radius: 10px; opacity: 1;"></div>
                                 @endforeach
                             </div>

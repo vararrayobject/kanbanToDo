@@ -11,8 +11,14 @@ $(".list-item").on('click', function () {
     let updateDesc = $(this).html().trim()
     console.log(updateTaskId, updateDesc, 'updateDesc')
     $("#myModal textarea").val(updateDesc)
+    choseColorPalette($(this).data('color-id'))
     // $(".color-palette").html(`<span><img src="/assets/img/check.svg" /></span>`)
 })
+
+function choseColorPalette(id) {
+    $('.color-palette').html('')
+    $("#color-palette-" + id).html(`<span><img src="/assets/img/check.svg" /></span>`)
+}
 
 $(".task-add").on('click', function () {
     let addnewTaskStatus = $(this).data('status-id')
