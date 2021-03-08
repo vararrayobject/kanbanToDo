@@ -1,19 +1,21 @@
 <x-app-layout>
-    <div class="container-fluid">
+    <div class="container-fluid card">
         <div class="row">
             @foreach ($statuses as $status)
             <div class="col-md-3 col-sm-6">
                 <div class="card-body rounded">
-                <h3>{{ ucfirst($status->name) }}</h3>
+                    <h3>{{ ucfirst($status->name) }}</h3>
                     <div class="row">
                         <ul class="{{ $status->name }}-list sortable ui-sortable pt-1" id="sort-{{ $status->name }}"
                             data-status-id="{{ $status->id }}">
                             @foreach ($items as $item)
                             @if ($status->id === $item->status_id)
                             <li class="list-item mb-3 p-2" id="task-{{ $item->id }}" data-task-id="{{ $item->id }}"
-                                data-color-id="{{ $item->color->id }}"
+                                data-color-id="{{ $item->color->id }}" data-desc="{{ $item->desc }}"
                                 style="background-color:{{ $item->color->color }} !important; border-radius: 10px !important;">
                                 {{ $item->desc }}
+                                <span class="close float-right"><img
+                                        src="{{ asset('/assets/img/Delete.svg') }}" /></span>
                             </li>
                             @endif
                             @endforeach
@@ -38,13 +40,10 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="myModalTitle">The title for this card would be here</h5>
-                            {{-- <form method="POST" id="updateTask">
-                                @method('put') --}}
                             <button type="button" class="update-task" aria-label="Update">
                                 <span aria-hidden="true"><img class="h-8 w-8 rounded-full object-cover"
                                         src="{{ asset('/assets/img/check-circle.svg') }}" /></span>
                             </button>
-                            {{-- </form> --}}
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true"><img class="h-8 w-8 rounded-full object-cover"
                                         src="{{ asset('/assets/img/cross-circle.svg') }}" /></span>
