@@ -38,10 +38,13 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="myModalTitle">The title for this card would be here</h5>
-                            <button type="button" class="update" aria-label="Update">
+                            {{-- <form method="POST" id="updateTask">
+                                @method('put') --}}
+                            <button type="button" class="update-task" aria-label="Update">
                                 <span aria-hidden="true"><img class="h-8 w-8 rounded-full object-cover"
                                         src="{{ asset('/assets/img/check-circle.svg') }}" /></span>
                             </button>
+                            {{-- </form> --}}
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true"><img class="h-8 w-8 rounded-full object-cover"
                                         src="{{ asset('/assets/img/cross-circle.svg') }}" /></span>
