@@ -3,16 +3,16 @@
         <div class="row">
             @foreach ($statuses as $status)
             <div class="col-md-3 col-sm-6">
-                <h3>{{ ucfirst($status->name) }}</h3>
                 <div class="card-body rounded">
+                <h3>{{ ucfirst($status->name) }}</h3>
                     <div class="row">
                         <ul class="{{ $status->name }}-list sortable ui-sortable pt-1" id="sort-{{ $status->name }}"
                             data-status-id="{{ $status->id }}">
                             @foreach ($items as $item)
                             @if ($status->id === $item->status_id)
-                            <li class="list-item card mb-3 p-2" data-task-id="{{ $item->id }}"
+                            <li class="list-item mb-3 p-2" id="task-{{ $item->id }}" data-task-id="{{ $item->id }}"
                                 data-color-id="{{ $item->color->id }}"
-                                style="background-color:{{ $item->color->color }} !important">
+                                style="background-color:{{ $item->color->color }} !important; border-radius: 10px !important;">
                                 {{ $item->desc }}
                             </li>
                             @endif
@@ -53,13 +53,13 @@
                         <div class="modal-body">
                             <div>
                                 <h5 class="">Description</h5>
-                                <textarea type="textarea" class="form-control" rows="3"></textarea>
+                                <textarea type="textarea" class="form-control" id="updateDesc" rows="3"></textarea>
                             </div>
                             <div class='mt-2'>
                                 <h5 class="">Color</h5>
                                 @foreach ($colors as $color)
                                 <div class="color-palette inline-block p-3" id="color-palette-{{ $color->id }}"
-                                    data-color-id="{{ $color->id }}" style="background: {{ $color->color }} 0% 0% no-repeat padding-box; border: 1px solid
+                                    data-color-id="{{ $color->id }}" data-color="{{ $color->color }}" style="background: {{ $color->color }} 0% 0% no-repeat padding-box; border: 1px solid
                                     #00000066; border-radius: 10px; opacity: 1;"></div>
                                 @endforeach
                             </div>

@@ -4,50 +4,61 @@ $(".add-new-button").on('click', function () {
     $(this).hide()
     $("#" + statusName).show()
 })
+let updateTaskId
+let updateColorId = $(this).data('task-color')
+let color_id
 
+let updatedColor
+let updatedDesc
 $(".list-item").on('click', function () {
     $('#myModal').modal('toggle')
-    let updateTaskId = $(this).data('task-id')
+    updateTaskId = $(this).data('task-id')
     let updateDesc = $(this).html().trim()
-    let color_id = $(this).data('color-id')
+    color_id = $(this).data('color-id')
+    updatedColor = $(this).data('color')
     $('.update-task').attr(
-    {
-        'data-task-id': updateTaskId,
-        'data-task-desc': updateDesc,
-        'data-task-color': color_id,
-    })
-    $('.update-task').attr('data-task-id', updateTaskId)
-    console.log(updateTaskId, updateDesc, 'updateDesc')
+        {
+            'data-task-desc': updateDesc,
+            'data-task-color': color_id,
+        })
     $("#myModal textarea").val(updateDesc)
+
     choseColorPalette(color_id)
-    // $(".color-palette").html(`<span><img src="/assets/img/check.svg" /></span>`)
 })
 
 $('.update-task').on('click', function () {
-    let addnewTaskStatus = $(this).data('status-id')
-    let desc = $(this).prev().val()
+    let updateTaskStatus = $(this).data('status-id')
+
     $.ajax({
-        url: "items/" + $(this).data('task-id'),
-        method: 'POST',
+        url: "items/" + updateTaskId,
+        type: 'PUT',
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            'method': 'put',
         },
         data: {
-            task_id: $(this).data('task-id'),
-            color_id: $(this).data('task-color'),
-            desc: $(this).data('task-desc'),
+            task_id: updateTaskId,
+            color_id: updateColorId,
+            desc: $('#updateDesc').val(),
         },
         success: function (response) {
-            let list = `
-                <li class="card mb-3 p-2" data-task-id="` + response.id + `"
-                    style="background-color:` + response.color.color + ` !important">
-                    ` + response.desc + `
-                </li>
-            `
-            $("#sort-" + response.status.name).append(list)
+            $('#task-' + updateTaskId).attr({
+                'data-color-id': updateColorId,
+                'style': "background: " + updatedColor + " !important;  border-radius: 10px !important;",
+            })
+            $('#task-' + updateTaskId).html(response.desc.trim())
+            $('#task-' + updateTaskId).attr('data-color-id', updateColorId)
+
+            $(this).prev().val($('#updateDesc').val())
+            $('#myModal').modal('toggle')
         },
     });
+})
+
+$('.color-palette').on('click', function () {
+    $('.update-task').attr('data-task-color', $(this).data('color-id'))
+    updateColorId = $(this).data('color-id')
+    updatedColor = $(this).data('color')
+    choseColorPalette($(this).data('color-id'))
 })
 
 function choseColorPalette(id) {
@@ -59,7 +70,6 @@ $(".task-add").on('click', function () {
     let addnewTaskStatus = $(this).data('status-id')
     let desc = $(this).prev().val()
     showButton()
-    console.log(desc, addnewTaskStatus)
     $.ajax({
         url: "items",
         method: 'POST',
@@ -73,7 +83,7 @@ $(".task-add").on('click', function () {
         success: function (response) {
             let list = `
                 <li class="card mb-3 p-2" data-task-id="` + response.id + `"
-                    style="background-color:` + response.color.color + ` !important">
+                    style="background-color:` + response.color.color + ` !important; border-radius: 10px !important;">
                     ` + response.desc + `
                 </li>
             `
@@ -105,7 +115,6 @@ $(function () {
         opacity: 0.5,
         stop: function (e, ui) {
             list = []
-            console.log('e, ui', ui)
             var status_id = $(ui.item).parent(".sortable").data(
                 "status-id");
             var task_id = $(ui.item).data("task-id");
@@ -123,7 +132,7 @@ $(function () {
                     task_id: task_id,
                     list: list,
                 },
-                success: function (response) {}
+                success: function (response) { }
             });
         },
     }).disableSelection();

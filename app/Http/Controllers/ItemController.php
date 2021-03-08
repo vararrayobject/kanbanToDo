@@ -19,7 +19,6 @@ class ItemController extends Controller
         $colors = Color::get();
         $statuses = Status::get();
         $items = Item::with(['color', 'status'])->orderBy('order')->get();
-        // dd($items->toArray());
         return view('dashboard', compact(['statuses', 'colors', 'items']));
     }
 
@@ -43,16 +42,13 @@ class ItemController extends Controller
     {
         $color = Color::find(1);
         $latestItem = Item::whereStatusId($request->status_id)->latest()->first();
-        // dd($order, $request->all());
         $item = new Item();
         $item->status_id = $request->status_id;
         $item->color_id = $color->id;
         $item->desc = $request->desc;
-        $item->order = $latestItem->order + 1;
+        $item->order = $latestItem === null ? 0 : $latestItem->order + 1;
         $item->save();
         return ($item->with(['color', 'status'])->latest()->first()->toArray());
-        // return ;
-        // $item->status_id = $request->status_id;
     }
 
     /**
@@ -86,7 +82,13 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = tap(Item::with(['color', 'status'])->find($id))->update(
+            [
+                'color_id' => $request->color_id,
+                'desc' => $request->desc,
+            ]
+        );
+        return $item;
     }
 
     /**
